@@ -8,7 +8,9 @@ the served GUI over loopback. No standalone Node runtime is bundled.
 
 ```sh
 npm install          # electron + electron-builder
-npm run icon         # generate the placeholder icon (build/icon.icns)
+npm run icon         # build/icon.icns from the official DeepSeek app icon
+                     # (assets/official-icon-1024.png, whitened; whale.svg is the
+                     # vector path extracted from the harness BrandWordmark)
 npm run backend:deploy   # pnpm deploy @deepseek-ai/dsh → ./backend (needs built harness repo; set DSH_REPO to override)
 npm start            # run the shell against ./backend (dev)
 npm run dist         # electron-builder --dir → dist/mac-arm64/DeepSeek Harness.app

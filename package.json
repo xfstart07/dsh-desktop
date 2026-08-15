@@ -7,7 +7,7 @@
   "main": "src/main.js",
   "scripts": {
     "start": "electron .",
-    "icon": "node scripts/gen-icon.mjs",
+    "icon": "node scripts/icon-from-official.mjs && node scripts/build-icns.mjs",
     "backend:deploy": "node scripts/deploy-backend.mjs",
     "dist": "electron-builder --dir",
     "dist:dmg": "electron-builder"
