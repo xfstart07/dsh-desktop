@@ -1,0 +1,20 @@
+appId: com.deepseek-ai.dsh-desktop
+productName: DeepSeek Harness
+directories:
+  buildResources: build
+  output: dist
+files:
+  - src/**
+  - package.json
+afterPack: scripts/after-pack.cjs
+extraResources:
+  - from: backend
+    to: backend
+mac:
+  target:
+    - target: dir
+      arch:
+        - arm64
+  category: public.app-category.developer-tools
+  icon: build/icon.icns
+npmRebuild: false

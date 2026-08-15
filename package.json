@@ -1,0 +1,19 @@
+{
+  "name": "dsh-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "description": "DeepSeek Harness Web GUI packaged as a macOS app: an Electron shell over the dsh web backend, running on Electron's bundled Node.",
+  "type": "module",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "icon": "node scripts/gen-icon.mjs",
+    "backend:deploy": "node scripts/deploy-backend.mjs",
+    "dist": "electron-builder --dir",
+    "dist:dmg": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^43.0.0",
+    "electron-builder": "^26.0.0"
+  }
+}
