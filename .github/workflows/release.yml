@@ -54,12 +54,12 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: dsh-desktop-dmg
-          path: dist/mac-arm64/*.dmg
+          path: dist/*.dmg
           if-no-files-found: error
 
       - name: Create GitHub Release
         run: |
-          gh release create "$GITHUB_REF_NAME" dist/mac-arm64/*.dmg \
+          gh release create "$GITHUB_REF_NAME" dist/*.dmg \
             --generate-notes \
             --title "DeepSeek Harness Desktop $GITHUB_REF_NAME"
         env:
