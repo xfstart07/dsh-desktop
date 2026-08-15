@@ -3,10 +3,12 @@
 The `dsh` CLI requires Node `^22.19 || >=24`. Latest stable Electron (43) ships
 Node 24, satisfying the engines range, so the App spawns the Backend with
 Electron's own binary in plain-Node mode (`ELECTRON_RUN_AS_NODE=1` plus
-`--expose-internals`, which the HMR service needs because the
-`node-addon-require-builtin` prebuilt addon does not load under Electron's ABI and
-the loader falls back to its non-internal path). We deliberately do NOT bundle a
-standalone Node runtime.
+`--expose-internals`). The loader's `requireInternal()` (vendor/loader
+`internal.ts`) checks `process.execArgv` for `--expose-internals` FIRST and then
+requires Node internals directly; the `node-addon-require-builtin` prebuilt addon
+is only the fallback when the flag is absent — and it does not load under
+Electron's ABI, so the HMR service throws without the flag. We deliberately do NOT
+bundle a standalone Node runtime.
 
 **Why**: bundling a second Node (~40 MB, custom afterPack logic, PATH management
 for spawned children) buys process isolation and a pinned runtime, but the web
