@@ -15,6 +15,9 @@ mac:
     - target: dir
       arch:
         - arm64
+    - target: dmg
+      arch:
+        - arm64
   category: public.app-category.developer-tools
   icon: build/icon.icns
 npmRebuild: false

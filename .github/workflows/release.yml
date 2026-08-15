@@ -1,0 +1,66 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-dmg:
+    runs-on: macos-14
+    env:
+      # No Developer ID certificate on CI: skip code-signing attempts entirely.
+      CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+    steps:
+      - name: Checkout dsh-desktop
+        uses: actions/checkout@v4
+
+      - name: Checkout deepseek-harness (backend source)
+        uses: actions/checkout@v4
+        with:
+          repository: deepseek-ai/deepseek-harness
+          path: harness
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.7.0
+
+      - name: Setup Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Build harness
+        working-directory: harness
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm run build
+
+      - name: Deploy backend bundle
+        run: |
+          DSH_REPO="${{ github.workspace }}/harness" node scripts/deploy-backend.mjs
+
+      - name: Install project dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build DMG
+        run: pnpm run dist:dmg
+
+      - name: Upload DMG artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dsh-desktop-dmg
+          path: dist/mac-arm64/*.dmg
+          if-no-files-found: error
+
+      - name: Create GitHub Release
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/mac-arm64/*.dmg \
+            --generate-notes \
+            --title "DeepSeek Harness Desktop $GITHUB_REF_NAME"
+        env:
+          GH_TOKEN: ${{ github.token }}
